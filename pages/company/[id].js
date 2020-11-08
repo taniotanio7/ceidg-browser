@@ -112,7 +112,6 @@ export async function getStaticProps({ params }) {
   }
 
   const data = await getCompanyById(params.id);
-  console.log(data);
   return {
     props: {
       adres: data.adres,
