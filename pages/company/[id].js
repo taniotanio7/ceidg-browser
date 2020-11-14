@@ -14,6 +14,7 @@ import {
 } from "react-feather";
 import ContentLoader from "react-content-loader";
 import Container from "~/components/Container";
+import CopyButton from "~/components/CopyButton";
 
 const CompanyPage = ({
   imie,
@@ -62,32 +63,13 @@ const CompanyPage = ({
       </Head>
       <main className="container mx-auto mt-4">
         <h2 className="text-lg pb-3 text-blue-600 font-black">Dane firmy</h2>
-        <div>
-          Właściciel:{" "}
-          <span className="font-semibold">
-            {imie} {nazwisko}
-          </span>
-        </div>
-        <div>
-          Nazwa: <span className="font-semibold">{nazwa}</span>
-        </div>
-        <div>
-          NIP: <span className="font-semibold">{nip}</span>
-        </div>
-        <div>
-          REGON: <span className="font-semibold">{regon}</span>
-        </div>
-        <div className="flex">
-          Email:{" "}
-          <span className={clsx("font-bold", !email && "text-gray-700")}>
-            {email ?? <HelpCircle className="ml-2 w-1/2" />}
-          </span>
-        </div>
-        <div className="flex">
-          Telefon:{" "}
-          <span className={clsx("font-bold", !telefon && "text-gray-700")}>
-            {telefon ?? <HelpCircle className="ml-2 w-1/2" />}
-          </span>
+        <div className="divide-y">
+          <DataPoint type="Właściciel" data={`${imie} ${nazwisko}`} />
+          <DataPoint type="Nazwa" data={nazwa} />
+          <DataPoint type="NIP" data={nip} />
+          <DataPoint type="REGON" data={regon} />
+          <DataPoint type="Email" data={email} bolder />
+          <DataPoint type="Telefon" data={telefon} bolder />
         </div>
         {strona && (
           <div>
@@ -121,6 +103,24 @@ const CompanyPage = ({
     </>
   );
 };
+
+function DataPoint({ type, data, bolder = false }) {
+  return (
+    <div className="flex items-center py-2">
+      {type}:{" "}
+      <span
+        className={clsx(
+          "ml-1",
+          bolder ? "text-bold" : "font-semibold",
+          !data && "text-gray-700"
+        )}
+      >
+        {data ?? <HelpCircle className="ml-1" />}
+      </span>
+      {data && <CopyButton className="ml-2" text={data} />}
+    </div>
+  );
+}
 
 function CompanyStatus({ status }) {
   const Icon = getIcon(status);
