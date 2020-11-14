@@ -11,10 +11,12 @@ import {
   AlertOctagon,
   XOctagon,
   HelpCircle,
+  Info,
 } from "react-feather";
 import ContentLoader from "react-content-loader";
 import Container from "~/components/Container";
 import CopyButton from "~/components/CopyButton";
+import capitalize from "~/utils/capitalize";
 
 const CompanyPage = ({
   imie,
@@ -62,40 +64,56 @@ const CompanyPage = ({
         <title>Firma - {nazwa}</title>
       </Head>
       <main className="container mx-auto mt-4">
-        <h2 className="text-lg pb-3 text-blue-600 font-black">Dane firmy</h2>
-        <div className="divide-y">
-          <DataPoint type="Właściciel" data={`${imie} ${nazwisko}`} />
-          <DataPoint type="Nazwa" data={nazwa} />
-          <DataPoint type="NIP" data={nip} />
-          <DataPoint type="REGON" data={regon} />
-          <DataPoint type="Email" data={email} bolder />
-          <DataPoint type="Telefon" data={telefon} bolder />
-        </div>
-        {strona && (
-          <div>
-            Strona: <a href={strona}>{strona}</a>
+        <h2 className="flex items-center text-lg pb-3 font-bold">
+          <Info className="mr-2 w-5" /> Dane firmy
+        </h2>
+
+        <div className="md:flex lg:gap-12">
+          <div className="w-1/2">
+            <div className="divide-y">
+              <DataPoint type="Właściciel" data={`${imie} ${nazwisko}`} />
+              <DataPoint type="Nazwa" data={nazwa} />
+              <DataPoint type="NIP" data={nip} />
+              <DataPoint type="REGON" data={regon} />
+              <DataPoint type="Email" data={email} bolder />
+              <DataPoint type="Telefon" data={telefon} bolder />
+            </div>
+            {strona && (
+              <div>
+                Strona: <a href={strona}>{strona}</a>
+              </div>
+            )}
+
+            <CompanyStatus status={status} />
           </div>
-        )}
 
-        <CompanyStatus status={status} />
-
-        <CompanyCodes codes={pkd} />
+          <div className="w-1/2">
+            <CompanyCodes codes={pkd} />
+          </div>
+        </div>
 
         <h3 className="text-lg py-3 font-bold">Dane adresowe</h3>
 
-        <h4 className="font-medium pb-2">Adres główny</h4>
-        <pre>{JSON.stringify(adres, null, 2)}</pre>
+        <div className="md:flex md:gap-4">
+          <div>
+            <h4 className="font-medium pb-2">Adres główny</h4>
+            <AddressPoint address={adres} />
+          </div>
 
-        {adres_korespondencja && (
-          <>
-            <h4 className="font-medium pb-2">Adres korespondencyjny</h4>
-            <pre>{JSON.stringify(adres_korespondencja, null, 2)}</pre>
-          </>
-        )}
+          {adres_korespondencja && (
+            <div>
+              <h4 className="font-medium pb-2">Adres korespondencyjny</h4>
+              <AddressPoint address={adres_korespondencja} />
+            </div>
+          )}
+        </div>
 
         {adres_dodatkowe && (
           <>
-            <h4 className="font-medium pb-2">Adres dodatkowy</h4>
+            <h4 className="font-medium pb-2">
+              Adres{adres_dodatkowe.length > 1 ? "y" : ""} dodatkow
+              {adres_dodatkowe.length > 1 ? "e" : "y"}
+            </h4>
             <pre>{JSON.stringify(adres_dodatkowe, null, 2)}</pre>
           </>
         )}
@@ -110,8 +128,8 @@ function DataPoint({ type, data, bolder = false }) {
       {type}:{" "}
       <span
         className={clsx(
-          "ml-1",
-          bolder ? "text-bold" : "font-semibold",
+          "ml-2",
+          bolder ? "font-bold" : "font-semibold",
           !data && "text-gray-700"
         )}
       >
@@ -126,7 +144,12 @@ function CompanyStatus({ status }) {
   const Icon = getIcon(status);
 
   return (
-    <div className={clsx("flex p-4 my-2 -ml-4", getStatusClass(status))}>
+    <div
+      className={clsx(
+        "flex p-4 mt-3 mb-12 -ml-4 rounded-lg shadow-2xl",
+        getStatusClass(status)
+      )}
+    >
       <Icon className="mr-3" />
       Status: <span className="ml-1 font-semibold">{status}</span>
     </div>
@@ -139,9 +162,9 @@ function CompanyStatus({ status }) {
   }
 
   function getStatusClass(text) {
-    if (text === "Wykreślony") return "bg-red-100 text-red-800";
-    if (text === "Aktywny") return "bg-green-100 text-green-800";
-    return "bg-orange-100 text-orange-800";
+    if (text === "Wykreślony") return "bg-red-200 text-red-800";
+    if (text === "Aktywny") return "bg-green-200 text-green-800";
+    return "bg-orange-200 text-orange-800";
   }
 }
 
@@ -153,7 +176,7 @@ function CompanyCodes({ codes }) {
   }
 
   return (
-    <>
+    <div>
       <Button
         secondary
         icon
@@ -167,7 +190,7 @@ function CompanyCodes({ codes }) {
       <div
         className={clsx(
           !open && "hidden",
-          "mt-3 bg-gray-300 text-gray-800 p-4 -ml-4"
+          "mt-5 bg-gray-300 text-gray-800 p-4 -ml-4 md:ml-0 rounded-lg shadow-2xl"
         )}
       >
         <ul className="divide-y divide-gray-400">
@@ -178,7 +201,31 @@ function CompanyCodes({ codes }) {
           ))}
         </ul>
       </div>
-    </>
+    </div>
+  );
+}
+
+function AddressPoint({ address }) {
+  if (!address) return null;
+
+  return (
+    <div className="text-sm text-gray-800 bg-gray-100 p-3 shadow-lg rounded-lg">
+      <div>
+        {address.Ulica} {address.Budynek}
+      </div>
+      <div>
+        {address.KodPocztowy} {address.Miejscowosc}
+        {address.Poczta !== address.Miejscowosc && (
+          <span className="ml-1 text-gray-700 text-sm">
+            (poczta: {address.Poczta})
+          </span>
+        )}
+      </div>
+      <div className="text-xs text-gray-600">
+        gmina {address.Gmina}, powiat {address.Powiat}, woj.{" "}
+        {capitalize(address.Wojewodztwo)}
+      </div>
+    </div>
   );
 }
 
