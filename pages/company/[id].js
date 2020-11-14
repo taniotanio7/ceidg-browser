@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import pkdMap from "~/data/pkd.json";
 import Button from "~/components/Button";
 import { Tag, CheckCircle, AlertOctagon, XOctagon } from "react-feather";
+import ContentLoader from "react-content-loader";
+import Container from "~/components/Container";
 
 const CompanyPage = ({
   imie,
@@ -25,7 +27,26 @@ const CompanyPage = ({
   const { isFallback } = useRouter();
 
   if (isFallback || !nazwa) {
-    return <p>Wczytywanie...</p>;
+    return (
+      <Container>
+        <h2 className="text-lg pb-3 text-blue-600 font-black">Dane firmy</h2>
+        <ContentLoader
+          speed={2}
+          width={400}
+          height={150}
+          viewBox="0 12 400 150"
+          backgroundColor="#f3f3f3"
+          foregroundColor="#ecebeb"
+        >
+          <rect x="0" y="12" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="32" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="50" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="71" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="91" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="112" rx="5" ry="5" width="220" height="10" />
+        </ContentLoader>
+      </Container>
+    );
   }
 
   return (
@@ -134,7 +155,7 @@ function CompanyCodes({ codes }) {
         onClick={() => setOpen(status => !status)}
       >
         <Tag className="mr-2 -ml-1" />
-        Kody PKD
+        {open ? "Ukryj" : "Pokaż"} kody PKD
       </Button>
 
       <div
