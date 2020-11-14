@@ -5,7 +5,13 @@ import { getCompanyById } from "~/api/fetch";
 import { useRouter } from "next/router";
 import pkdMap from "~/data/pkd.json";
 import Button from "~/components/Button";
-import { Tag, CheckCircle, AlertOctagon, XOctagon } from "react-feather";
+import {
+  Tag,
+  CheckCircle,
+  AlertOctagon,
+  XOctagon,
+  HelpCircle,
+} from "react-feather";
 import ContentLoader from "react-content-loader";
 import Container from "~/components/Container";
 
@@ -71,16 +77,16 @@ const CompanyPage = ({
         <div>
           REGON: <span className="font-semibold">{regon}</span>
         </div>
-        <div>
+        <div className="flex">
           Email:{" "}
-          <span className={clsx("font-bold", !email && "text-red-600")}>
-            {email ?? "Brak danych"}
+          <span className={clsx("font-bold", !email && "text-gray-700")}>
+            {email ?? <HelpCircle className="ml-2 w-1/2" />}
           </span>
         </div>
-        <div>
+        <div className="flex">
           Telefon:{" "}
-          <span className={clsx("font-bold", !telefon && "text-red-600")}>
-            {telefon ?? "Brak danych"}
+          <span className={clsx("font-bold", !telefon && "text-gray-700")}>
+            {telefon ?? <HelpCircle className="ml-2 w-1/2" />}
           </span>
         </div>
         {strona && (
