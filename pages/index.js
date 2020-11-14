@@ -8,6 +8,7 @@ import FormikSubmit from "~/components/FormikSubmit";
 import { useState } from "react";
 import Link from "next/link";
 import FormikClear from "~/components/FormikClear";
+import Container from "~/components/Container";
 
 const SearchForm = () => {
   const { values, status, errors } = useFormikContext();
@@ -87,7 +88,7 @@ export default function Home() {
       <Head>
         <title>Wyszukiwarka Firm</title>
       </Head>
-      <main className="container mx-auto mt-4">
+      <Container>
         <Formik
           initialValues={{
             nip: "",
@@ -102,7 +103,7 @@ export default function Home() {
           <SearchForm />
         </Formik>
         <Results results={results} />
-      </main>
+      </Container>
     </>
   );
 

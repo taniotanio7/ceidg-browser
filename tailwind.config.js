@@ -5,7 +5,11 @@ module.exports = {
   },
   purge: ["./pages/**/*.js", "./components/**/*.js"],
   theme: {
-    extend: {},
+    extend: {
+      margin: {
+        "-2": "-0.5rem",
+      },
+    },
   },
   variants: {
     backgroundColor: ({ after }) => after(["disabled"]),
