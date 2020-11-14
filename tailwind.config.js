@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       margin: {
         "-2": "-0.5rem",
+        "-4": "-1rem",
       },
     },
   },

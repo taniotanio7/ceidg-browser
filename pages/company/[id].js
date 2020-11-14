@@ -21,7 +21,7 @@ const CompanyPage = ({
   const { isFallback } = useRouter();
 
   if (isFallback || !nazwa) {
-    <p>Wczytywanie...</p>;
+    return <p>Wczytywanie...</p>;
   }
 
   return (
@@ -64,13 +64,7 @@ const CompanyPage = ({
           </div>
         )}
 
-        <div
-          className={clsx(
-            "p-4 my-2",
-            status === "Wykreślony" ? "bg-red-100" : "bg-green-100"
-          )}
-          style={{ marginLeft: "-1rem" }}
-        >
+        <div className={clsx("p-4 my-2 -ml-4", getStatusClass(status))}>
           Status: <span className="font-semibold">{status}</span>
         </div>
 
@@ -96,6 +90,12 @@ const CompanyPage = ({
     </>
   );
 };
+
+function getStatusClass(text) {
+  if (text === "Wykreślony") return "bg-red-100";
+  if (text === "Zawieszony") return "bg-orange-100";
+  return "bg-green-100";
+}
 
 export function getStaticPaths() {
   return {
@@ -130,24 +130,5 @@ export async function getStaticProps({ params }) {
     revalidate: 60,
   };
 }
-
-// CompanyPage.getInitialProps = async ({query}) => {
-//   mongoose.connect("mongodb://localhost/ceidg", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//     useCreateIndex: true
-//   })
-//
-//   let Company
-//
-//   try {
-//     Company = mongoose.model("Company");
-//   } catch {
-//     Company = mongoose.model("Company", companySchema);
-//   }
-//
-//   return await Company.findById(query.id)
-// }
 
 export default CompanyPage;
