@@ -134,14 +134,14 @@ function CompanyStatus({ status }) {
 
   function getIcon(text) {
     if (text === "Wykreślony") return XOctagon;
-    if (text === "Zawieszony") return AlertOctagon;
-    return CheckCircle;
+    if (text === "Aktywny") return CheckCircle;
+    return AlertOctagon;
   }
 
   function getStatusClass(text) {
     if (text === "Wykreślony") return "bg-red-100 text-red-800";
-    if (text === "Zawieszony") return "bg-orange-100 text-orange-800";
-    return "bg-green-100 text-green-800";
+    if (text === "Aktywny") return "bg-green-100 text-green-800";
+    return "bg-orange-100 text-orange-800";
   }
 }
 
