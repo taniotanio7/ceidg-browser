@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import clsx from "clsx";
 import { getCompanyById } from "~/api/fetch";
 import { useRouter } from "next/router";
+import pkdMap from "~/data/pkd.json";
+import Button from "~/components/Button";
+import { Tag, CheckCircle, AlertOctagon, XOctagon } from "react-feather";
 
 const CompanyPage = ({
   imie,
@@ -17,6 +20,7 @@ const CompanyPage = ({
   status,
   adres_korespondencja,
   adres_dodatkowe,
+  pkd,
 }) => {
   const { isFallback } = useRouter();
 
@@ -64,9 +68,9 @@ const CompanyPage = ({
           </div>
         )}
 
-        <div className={clsx("p-4 my-2 -ml-4", getStatusClass(status))}>
-          Status: <span className="font-semibold">{status}</span>
-        </div>
+        <CompanyStatus status={status} />
+
+        <CompanyCodes codes={pkd} />
 
         <h3 className="text-lg py-3 font-bold">Dane adresowe</h3>
 
@@ -91,10 +95,64 @@ const CompanyPage = ({
   );
 };
 
-function getStatusClass(text) {
-  if (text === "Wykreślony") return "bg-red-100";
-  if (text === "Zawieszony") return "bg-orange-100";
-  return "bg-green-100";
+function CompanyStatus({ status }) {
+  const Icon = getIcon(status);
+
+  return (
+    <div className={clsx("flex p-4 my-2 -ml-4", getStatusClass(status))}>
+      <Icon className="mr-3" />
+      Status: <span className="ml-1 font-semibold">{status}</span>
+    </div>
+  );
+
+  function getIcon(text) {
+    if (text === "Wykreślony") return XOctagon;
+    if (text === "Zawieszony") return AlertOctagon;
+    return CheckCircle;
+  }
+
+  function getStatusClass(text) {
+    if (text === "Wykreślony") return "bg-red-100 text-red-800";
+    if (text === "Zawieszony") return "bg-orange-100 text-orange-800";
+    return "bg-green-100 text-green-800";
+  }
+}
+
+function CompanyCodes({ codes }) {
+  const [open, setOpen] = useState(false);
+
+  if (Object.entries(codes).length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Button
+        secondary
+        icon
+        className="mt-3"
+        onClick={() => setOpen(status => !status)}
+      >
+        <Tag className="mr-2 -ml-1" />
+        Kody PKD
+      </Button>
+
+      <div
+        className={clsx(
+          !open && "hidden",
+          "mt-3 bg-gray-300 text-gray-800 p-4 -ml-4"
+        )}
+      >
+        <ul className="divide-y divide-gray-400">
+          {Object.entries(codes).map(([kod, desc]) => (
+            <li className="py-2" key={kod}>
+              {kod}: {desc}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
 }
 
 export function getStaticPaths() {
@@ -112,6 +170,9 @@ export async function getStaticProps({ params }) {
   }
 
   const data = await getCompanyById(params.id);
+
+  const pkd = preparePKD(data.pkd.split(","));
+
   return {
     props: {
       adres: data.adres,
@@ -125,10 +186,20 @@ export async function getStaticProps({ params }) {
       email: data.email,
       strona: data.strona,
       status: data.status,
-      pkd: data.pkd.split(","),
+      pkd: findPKDs(pkd),
     },
     revalidate: 60,
   };
+
+  function preparePKD(codes) {
+    return codes.map(
+      pkd => `${pkd.slice(0, 2)}.${pkd.slice(2, 4)}.${pkd.slice(4)}`
+    );
+  }
+
+  function findPKDs(codes) {
+    return codes.reduce((prev, pkd) => ({ ...prev, [pkd]: pkdMap[pkd] }), {});
+  }
 }
 
 export default CompanyPage;
