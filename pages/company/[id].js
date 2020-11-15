@@ -255,12 +255,12 @@ function AddressPoint({ address, additional = false }) {
       </div>
       <div>
         {address.KodPocztowy} {address.Miejscowosc}
-        {address.Poczta !== address.Miejscowosc && (
-          <span className="ml-1 text-warmGray-700 text-sm">
-            (poczta: {address.Poczta})
-          </span>
-        )}
       </div>
+      {address.Poczta !== address.Miejscowosc && (
+        <div className="text-warmGray-600 py-1 text-xs">
+          (poczta: {address.Poczta})
+        </div>
+      )}
       {address.Gmina && address.Powiat && (
         <div className="text-xs text-warmGray-600">
           gmina {address.Gmina}, powiat {address.Powiat},
