@@ -1,10 +1,10 @@
-import React from 'react'
-import {Compass} from "react-feather";
+import React from "react";
+import { Compass } from "react-feather";
 import Link from "next/link";
 
 const Header = () => {
   return (
-    <header className="bg-blue-700">
+    <header className="bg-blue-700 px-4">
       <Link href="/">
         <a className="flex items-center container py-5 mx-auto">
           <Compass className="text-white mr-4" />
@@ -12,7 +12,7 @@ const Header = () => {
         </a>
       </Link>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

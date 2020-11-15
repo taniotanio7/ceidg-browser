@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 const Field = ({
   label,
+  textColor = "gray",
   className,
   inputClassName,
   disabled,
@@ -21,7 +22,7 @@ const Field = ({
         htmlFor={id}
         className={clsx(
           "block text-sm font-bold mb-2",
-          disabled ? "text-gray-500" : "text-gray-700"
+          disabled ? `text-${textColor}-500` : `text-${textColor}-700`
         )}
       >
         {label}
@@ -36,7 +37,9 @@ const Field = ({
         {...field}
       />
       {description && (
-        <p className="mt-2 text-xs text-gray-500 font-light">{description}</p>
+        <p className={`mt-2 text-xs text-${textColor}-500 font-light`}>
+          {description}
+        </p>
       )}
       {meta.touched && meta.error && (
         <div className="mt-1 text-red-600">{meta.error}</div>

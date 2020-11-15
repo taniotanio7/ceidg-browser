@@ -7,21 +7,26 @@ import axios from "axios";
 import FormikSubmit from "~/components/FormikSubmit";
 import { useState } from "react";
 import Link from "next/link";
+import { Search, ArrowRight } from "react-feather";
 import FormikClear from "~/components/FormikClear";
 import Container from "~/components/Container";
+import ContentLoader from "react-content-loader";
 
 const SearchForm = () => {
   const { values, status, errors } = useFormikContext();
 
   return (
-    <section>
-      <h2 className="text-lg font-bold">Wprowadź dane</h2>
-      <Form>
-        <div className="flex gap-10">
+    <div className="flex justify-center md:mt-10">
+      <section className="p-4 bg-blueGray-200 w-80 rounded-xl shadow-2xl">
+        <h2 className="text-lg font-bold text-center text-blueGray-800">
+          Wprowadź dane
+        </h2>
+        <Form>
           <Field
             autoComplete="off"
             label="NIP"
             name="nip"
+            textColor="blueGray"
             className="mt-3 w-48"
             disabled={!!values.regon}
             description={
@@ -33,6 +38,7 @@ const SearchForm = () => {
             autoComplete="off"
             label="REGON"
             name="regon"
+            textColor="blueGray"
             className="mt-3 w-48"
             disabled={!!values.nip}
             description={
@@ -40,44 +46,59 @@ const SearchForm = () => {
               "Możesz wybrać tylko jeden parametr do wyszukiwania"
             }
           />
-        </div>
-        <div className="flex gap-4 mt-4">
-          <FormikSubmit>Szukaj firmy</FormikSubmit>
-          <FormikClear>Wyczyść</FormikClear>
-        </div>
-        {(status?.error || errors?.general) && (
-          <div className="mt-3 text-red-600">
-            {status?.error || errors?.general}
+          <div className="flex justify-between mt-4">
+            <FormikSubmit>Szukaj firmy</FormikSubmit>
+            <FormikClear>Wyczyść</FormikClear>
           </div>
-        )}
-      </Form>
-    </section>
+          {(status?.error || errors?.general) && (
+            <div className="mt-3 text-red-600">
+              {status?.error || errors?.general}
+            </div>
+          )}
+        </Form>
+      </section>
+    </div>
+  );
+};
+
+const ResultItem = ({ result }) => {
+  return (
+    <Link href={`/company/${result._id}`}>
+      <a className="flex my-2 px-4 py-3 bg-coolGray-50 text-coolGray-700 border border-coolGray-200 hover:border-coolGray-300 shadow-sm hover:shadow-md transition-all rounded-xl">
+        <span>{result.nazwa}</span>
+        <ArrowRight className="ml-auto text-coolGray-600" />
+      </a>
+    </Link>
   );
 };
 
 const Results = ({ results }) => {
-  if (results?.length) {
-    return (
-      <section className="mt-8">
-        <h2 className="text-lg font-bold">Wyniki</h2>
-        {results.map(result => (
-          <Link key={result._id} href={`/company/${result._id}`}>
-            <a className="block my-2">{result.nazwa}</a>
-          </Link>
-        ))}
-      </section>
-    );
-  }
+  const { isSubmitting } = useFormikContext();
 
-  if (results !== null) {
-    return (
-      <section className="mt-4">
-        <p className="font-lg font-bold text-red-800">Brak wyników</p>
-      </section>
-    );
-  }
+  if (results === null) return null;
 
-  return null;
+  return (
+    <section>
+      <h2 className="flex items-center text-lg font-bold">
+        <Search className="mr-2" />
+        Wyniki
+      </h2>
+      {isSubmitting && (
+        <ContentLoader
+          speed={2}
+          width="100%"
+          backgroundColor="#f3f3f3"
+          foregroundColor="#ecebeb"
+          className="my-2"
+        >
+          <rect x="0" y="0" rx="9" ry="9" width="100%" height="48" />
+        </ContentLoader>
+      )}
+      {!isSubmitting &&
+        results.map(result => <ResultItem result={result} key={result._id} />)}
+      {!results.length && !isSubmitting && <div>Brak wyników</div>}
+    </section>
+  );
 };
 
 export default function Home() {
@@ -100,9 +121,13 @@ export default function Home() {
           onSubmit={handleSubmit}
           onReset={handleReset}
         >
-          <SearchForm />
+          <>
+            <SearchForm />
+            <div className="mt-8 md:mt-20 max-w-4xl px-4 mx-auto">
+              <Results results={results} />
+            </div>
+          </>
         </Formik>
-        <Results results={results} />
       </Container>
     </>
   );
