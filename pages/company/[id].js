@@ -213,10 +213,10 @@ function CompanyCodes({ codes }) {
       <div
         className={clsx(
           !open && "hidden",
-          "mt-5 bg-gray-300 text-gray-800 p-4 -ml-4 md:ml-0 rounded-lg shadow-2xl"
+          "mt-5 bg-gray-200 text-gray-800 p-4 -ml-4 md:ml-0 rounded-lg shadow-2xl"
         )}
       >
-        <ul className="divide-y divide-gray-400">
+        <ul className="divide-y divide-gray-300">
           {Object.entries(codes).map(([kod, desc]) => (
             <li className="py-2" key={kod}>
               {kod}: {desc}
