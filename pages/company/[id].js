@@ -77,14 +77,20 @@ const CompanyPage = ({
               <DataPoint type="Nazwa" data={nazwa} />
               <DataPoint type="NIP" data={nip} />
               <DataPoint type="REGON" data={regon} />
-              <DataPoint type="Email" data={email} bolder />
-              <DataPoint type="Telefon" data={telefon} bolder />
+              <DataPoint
+                type="Email"
+                data={email}
+                link={`mailto:${email}`}
+                bolder
+              />
+              <DataPoint
+                type="Telefon"
+                data={telefon}
+                link={`tel:${telefon}`}
+                bolder
+              />
+              <DataPoint type="Strona" data={strona} link={strona} bolder />
             </div>
-            {strona && (
-              <div>
-                Strona: <a href={strona}>{strona}</a>
-              </div>
-            )}
           </div>
 
           <div className="w-1/2">
@@ -119,11 +125,14 @@ const CompanyPage = ({
   );
 };
 
-function DataPoint({ type, data, bolder = false }) {
+function DataPoint({ type, data, bolder = false, link }) {
+  const Element = link ? "a" : "span";
+
   return (
     <div className="flex items-center py-2">
       {type}:{" "}
-      <span
+      <Element
+        href={link}
         className={clsx(
           "ml-2",
           bolder ? "font-bold" : "font-semibold",
@@ -131,7 +140,7 @@ function DataPoint({ type, data, bolder = false }) {
         )}
       >
         {data ?? <HelpCircle className="ml-1" />}
-      </span>
+      </Element>
       {data && <CopyButton className="ml-4 shadow-sm" text={data} />}
     </div>
   );
