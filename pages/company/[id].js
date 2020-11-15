@@ -214,7 +214,7 @@ function AddressPoint({ address }) {
   if (!address) return null;
 
   return (
-    <div className="text-sm mx-6 md:mx-0 relative text-warmGray-800 bg-warmGray-100 p-3 shadow-lg rounded-lg">
+    <div className="mt-3 text-sm mx-6 md:mx-0 relative text-warmGray-800 bg-warmGray-100 p-3 shadow-lg rounded-lg">
       <div
         className="absolute bg-white rounded-full p-2 shadow-lg bg-pink-100 text-pink-800"
         style={{ top: "-1rem", right: "-1rem" }}
