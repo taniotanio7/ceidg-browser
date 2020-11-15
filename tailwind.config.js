@@ -274,6 +274,9 @@ module.exports = {
       },
     },
     extend: {
+      minWidth: {
+        32: "8rem",
+      },
       margin: {
         "-1": "-0.25rem",
         "-2": "-0.5rem",

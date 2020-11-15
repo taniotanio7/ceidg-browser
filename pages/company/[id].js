@@ -113,15 +113,7 @@ const CompanyPage = ({
           )}
         </div>
 
-        {adres_dodatkowe && (
-          <>
-            <h4 className="font-medium pb-2">
-              Adres{adres_dodatkowe.length > 1 ? "y" : ""} dodatkowy
-              {adres_dodatkowe.length > 1 ? "e" : "y"}
-            </h4>
-            <pre>{JSON.stringify(adres_dodatkowe, null, 2)}</pre>
-          </>
-        )}
+        <AdditionalAddresses adresDodatkowe={adres_dodatkowe} />
       </main>
     </>
   );
@@ -143,6 +135,30 @@ function DataPoint({ type, data, bolder = false }) {
       {data && <CopyButton className="ml-4 shadow-sm" text={data} />}
     </div>
   );
+}
+
+function AdditionalAddresses({ adresDodatkowe }) {
+  const adresy = Array.isArray(adresDodatkowe.Adres)
+    ? adresDodatkowe.Adres
+    : [adresDodatkowe.Adres];
+
+  if (adresy.length) {
+    return (
+      <>
+        <h4 className="font-medium pb-2">
+          Adres{adresy.length > 1 ? "y" : ""} dodatkowy
+          {adresy.length > 1 ? "e" : "y"}
+        </h4>
+        <div className="flex md:gap-8">
+          {adresy.map((adres, i) => (
+            <AddressPoint key={i} address={adres} additional />
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  return null;
 }
 
 function CompanyStatus({ status }) {
@@ -210,13 +226,15 @@ function CompanyCodes({ codes }) {
   );
 }
 
-function AddressPoint({ address }) {
+function AddressPoint({ address, additional = false }) {
   if (!address) return null;
 
+  const color = additional ? "indigo" : "pink";
+
   return (
-    <div className="mt-3 text-sm mx-6 md:mx-0 relative text-warmGray-800 bg-warmGray-100 p-3 shadow-lg rounded-lg">
+    <div className="mt-3 text-sm mx-6 md:mx-0 min-w-32 relative text-warmGray-800 bg-warmGray-100 p-3 shadow-lg rounded-lg">
       <div
-        className="absolute bg-white rounded-full p-2 shadow-lg bg-pink-100 text-pink-800"
+        className={`absolute bg-white rounded-full p-2 shadow-lg bg-${color}-100 text-${color}-800`}
         style={{ top: "-1rem", right: "-1rem" }}
       >
         <MapPin />
@@ -232,10 +250,12 @@ function AddressPoint({ address }) {
           </span>
         )}
       </div>
-      <div className="text-xs text-warmGray-600">
-        gmina {address.Gmina}, powiat {address.Powiat}, woj.{" "}
-        {capitalize(address.Wojewodztwo)}
-      </div>
+      {address.Gmina && address.Powiat && (
+        <div className="text-xs text-warmGray-600">
+          gmina {address.Gmina}, powiat {address.Powiat},
+          {address.Wojewodztwo && `woj. ${capitalize(address.Wojewodztwo)}`}
+        </div>
+      )}
     </div>
   );
 }
