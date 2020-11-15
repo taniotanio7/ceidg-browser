@@ -264,7 +264,7 @@ function AddressPoint({ address, additional = false }) {
       {address.Gmina && address.Powiat && (
         <div className="text-xs text-warmGray-600">
           gmina {address.Gmina}, powiat {address.Powiat},
-          {address.Wojewodztwo && `woj. ${capitalize(address.Wojewodztwo)}`}
+          {address.Wojewodztwo && ` woj. ${capitalize(address.Wojewodztwo)}`}
         </div>
       )}
     </div>
