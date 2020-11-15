@@ -12,6 +12,8 @@ import {
   XOctagon,
   HelpCircle,
   Info,
+  Home,
+  MapPin,
 } from "react-feather";
 import ContentLoader from "react-content-loader";
 import Container from "~/components/Container";
@@ -63,9 +65,9 @@ const CompanyPage = ({
       <Head>
         <title>Firma - {nazwa}</title>
       </Head>
-      <main className="container mx-auto mt-4">
+      <main className="container mx-2 sm:mx-auto mt-4">
         <h2 className="flex items-center text-lg pb-3 font-bold">
-          <Info className="mr-2 w-5" /> Dane firmy
+          <Info className="mr-3 w-5" /> Dane firmy
         </h2>
 
         <div className="md:flex lg:gap-12">
@@ -83,8 +85,6 @@ const CompanyPage = ({
                 Strona: <a href={strona}>{strona}</a>
               </div>
             )}
-
-            <CompanyStatus status={status} />
           </div>
 
           <div className="w-1/2">
@@ -92,9 +92,14 @@ const CompanyPage = ({
           </div>
         </div>
 
-        <h3 className="text-lg py-3 font-bold">Dane adresowe</h3>
+        <CompanyStatus status={status} />
 
-        <div className="md:flex md:gap-4">
+        <h3 className="flex items-center text-lg py-3 font-bold">
+          <Home className="mr-3 w-5" />
+          Dane adresowe
+        </h3>
+
+        <div className="md:flex md:gap-8">
           <div>
             <h4 className="font-medium pb-2">Adres główny</h4>
             <AddressPoint address={adres} />
@@ -111,7 +116,7 @@ const CompanyPage = ({
         {adres_dodatkowe && (
           <>
             <h4 className="font-medium pb-2">
-              Adres{adres_dodatkowe.length > 1 ? "y" : ""} dodatkow
+              Adres{adres_dodatkowe.length > 1 ? "y" : ""} dodatkowy
               {adres_dodatkowe.length > 1 ? "e" : "y"}
             </h4>
             <pre>{JSON.stringify(adres_dodatkowe, null, 2)}</pre>
@@ -135,7 +140,7 @@ function DataPoint({ type, data, bolder = false }) {
       >
         {data ?? <HelpCircle className="ml-1" />}
       </span>
-      {data && <CopyButton className="ml-2" text={data} />}
+      {data && <CopyButton className="ml-4 shadow-sm" text={data} />}
     </div>
   );
 }
@@ -146,7 +151,7 @@ function CompanyStatus({ status }) {
   return (
     <div
       className={clsx(
-        "flex p-4 mt-3 mb-12 -ml-4 rounded-lg shadow-2xl",
+        "flex p-4 mt-3 md:mt-12 mb-12 max-w-3xl mx-auto rounded-lg shadow-2xl",
         getStatusClass(status)
       )}
     >
@@ -209,19 +214,25 @@ function AddressPoint({ address }) {
   if (!address) return null;
 
   return (
-    <div className="text-sm text-gray-800 bg-gray-100 p-3 shadow-lg rounded-lg">
+    <div className="text-sm mx-6 md:mx-0 relative text-warmGray-800 bg-warmGray-100 p-3 shadow-lg rounded-lg">
+      <div
+        className="absolute bg-white rounded-full p-2 shadow-lg bg-pink-100 text-pink-800"
+        style={{ top: "-1rem", right: "-1rem" }}
+      >
+        <MapPin />
+      </div>
       <div>
         {address.Ulica} {address.Budynek}
       </div>
       <div>
         {address.KodPocztowy} {address.Miejscowosc}
         {address.Poczta !== address.Miejscowosc && (
-          <span className="ml-1 text-gray-700 text-sm">
+          <span className="ml-1 text-warmGray-700 text-sm">
             (poczta: {address.Poczta})
           </span>
         )}
       </div>
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-warmGray-600">
         gmina {address.Gmina}, powiat {address.Powiat}, woj.{" "}
         {capitalize(address.Wojewodztwo)}
       </div>
@@ -262,7 +273,7 @@ export async function getStaticProps({ params }) {
       status: data.status,
       pkd: findPKDs(pkd),
     },
-    revalidate: 60,
+    revalidate: 21600, // 6h
   };
 
   function preparePKD(codes) {

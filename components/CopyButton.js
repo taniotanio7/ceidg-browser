@@ -20,7 +20,7 @@ const CopyButton = ({ text, className, children }) => {
   return (
     <button
       className={clsx(
-        "bg-gray-300 hover:bg-gray-200 text-gray-700 cursor-pointer font-bold py-1 rounded",
+        "bg-gray-200 hover:bg-gray-200 text-gray-700 cursor-pointer font-bold py-1 rounded",
         hasText ? "px-2" : "px-1",
         className
       )}
