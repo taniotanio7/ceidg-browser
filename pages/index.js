@@ -7,7 +7,7 @@ import axios from "axios";
 import FormikSubmit from "~/components/FormikSubmit";
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ArrowRight } from "react-feather";
+import { Search, ArrowRight, Frown } from "react-feather";
 import FormikClear from "~/components/FormikClear";
 import Container from "~/components/Container";
 import ContentLoader from "react-content-loader";
@@ -96,7 +96,12 @@ const Results = ({ results }) => {
       )}
       {!isSubmitting &&
         results.map(result => <ResultItem result={result} key={result._id} />)}
-      {!results.length && !isSubmitting && <div>Brak wyników</div>}
+      {!results.length && !isSubmitting && (
+        <div className="flex px-4 py-3 mt-2 bg-red-200 text-red-900 shadow-sm hover:shadow-md transition-all rounded-xl">
+          <Frown className="mr-3" />
+          Brak wyników
+        </div>
+      )}
     </section>
   );
 };
