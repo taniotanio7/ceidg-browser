@@ -138,9 +138,11 @@ function DataPoint({ type, data, bolder = false }) {
 }
 
 function AdditionalAddresses({ adresDodatkowe }) {
-  const adresy = Array.isArray(adresDodatkowe.Adres)
-    ? adresDodatkowe.Adres
-    : [adresDodatkowe.Adres];
+  const adresy = adresDodatkowe?.Adres
+    ? Array.isArray(adresDodatkowe?.Adres)
+      ? adresDodatkowe?.Adres
+      : [adresDodatkowe?.Adres]
+    : [];
 
   if (adresy.length) {
     return (
