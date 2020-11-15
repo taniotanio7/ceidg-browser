@@ -145,8 +145,8 @@ function AdditionalAddresses({ adresDodatkowe }) {
   if (adresy.length) {
     return (
       <>
-        <h4 className="font-medium pb-2">
-          Adres{adresy.length > 1 ? "y" : ""} dodatkowy
+        <h4 className="font-medium pt-5 pb-2">
+          Adres{adresy.length > 1 ? "y" : ""} dodatkow
           {adresy.length > 1 ? "e" : "y"}
         </h4>
         <div className="flex md:gap-8">
