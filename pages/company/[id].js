@@ -42,17 +42,17 @@ const CompanyPage = ({
         <ContentLoader
           speed={2}
           width={400}
-          height={150}
-          viewBox="0 12 400 150"
+          height={250}
+          viewBox="0 0 400 250"
           backgroundColor="#f3f3f3"
           foregroundColor="#ecebeb"
         >
-          <rect x="0" y="12" rx="5" ry="5" width="220" height="10" />
-          <rect x="0" y="32" rx="5" ry="5" width="220" height="10" />
-          <rect x="0" y="50" rx="5" ry="5" width="220" height="10" />
-          <rect x="0" y="71" rx="5" ry="5" width="220" height="10" />
-          <rect x="0" y="91" rx="5" ry="5" width="220" height="10" />
-          <rect x="0" y="112" rx="5" ry="5" width="220" height="10" />
+          <rect x="0" y="0" rx="9" ry="9" width="100%" height="32" />
+          <rect x="0" y="40" rx="9" ry="9" width="100%" height="32" />
+          <rect x="0" y="80" rx="9" ry="9" width="100%" height="32" />
+          <rect x="0" y="120" rx="9" ry="9" width="100%" height="32" />
+          <rect x="0" y="160" rx="9" ry="9" width="100%" height="32" />
+          <rect x="0" y="200" rx="9" ry="9" width="100%" height="32" />
         </ContentLoader>
       </Container>
     );
